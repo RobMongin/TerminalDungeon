@@ -1,0 +1,7 @@
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\obj\Debug\TerminalDungeon.csproj.AssemblyReference.cache
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\obj\Debug\TerminalDungeon.csproj.CoreCompileInputs.cache
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\bin\Debug\TerminalDungeon.exe.config
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\bin\Debug\TerminalDungeon.exe
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\bin\Debug\TerminalDungeon.pdb
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\obj\Debug\TerminalDungeon.exe
+H:\ElevenFiftyProjects\Assignments\TerminalDungeon\TerminalDungeon\obj\Debug\TerminalDungeon.pdb
