@@ -9,9 +9,14 @@ namespace TerminalDungeon
     public class ProgramUI
     {
         public static Player currentPlayer = new Player();
+
         public bool playerIsAlive = true;
         public bool continueToRun = true;
         public bool encounterComplete = false;
+        
+        public int playerWeapons = 0;
+        public int playerArmor = 0;
+        public int roomsCompleted = 0;
 
 
         public void Run()
@@ -55,7 +60,10 @@ namespace TerminalDungeon
             Console.ReadKey();
             while (playerIsAlive == true)
             {
-                CreateEncounter();
+                if(encounterComplete == false)
+                {
+                    CreateEncounter();
+                }
             }
         }
 
@@ -94,11 +102,7 @@ namespace TerminalDungeon
         private void CreateEncounter()
         {
             Room currentRoom = new Room().CreateRoom();
-            Enemy currentEnemy = new Enemy().GetEnemy();
-
-            int playerWeapons = 0;
-            int playerArmor = 0;
-
+            
 
 
             while (encounterComplete == false)
@@ -124,6 +128,7 @@ namespace TerminalDungeon
                                 Console.ReadLine();
                                 Console.WriteLine("Press any key to move on.");
                                 Console.ReadLine();
+                                roomsCompleted++;
                                 encounterComplete = true;
                                 break;
                             case "2":
@@ -133,6 +138,7 @@ namespace TerminalDungeon
                                 Console.ReadLine();
                                 Console.WriteLine("Press any key to move on.");
                                 Console.ReadLine();
+                                roomsCompleted++;
                                 encounterComplete = true;
                                 break;
                             case "3":
@@ -141,6 +147,7 @@ namespace TerminalDungeon
                                 Console.ReadLine();
                                 Console.WriteLine("Press any key to move on.");
                                 Console.ReadLine();
+                                roomsCompleted++;
                                 encounterComplete = true;
                                 break;
                             default:
@@ -155,11 +162,11 @@ namespace TerminalDungeon
                         Console.WriteLine("The air feels nice in the open field. You feel slightly faster");
                         currentPlayer.Speed = currentPlayer.Speed + 5;
                         Console.ReadLine();
-                        Console.WriteLine("You see a " + currentEnemy.Name + "!");
+                        Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
                         Console.WriteLine("Would you like to: \n" +
                             "1. Attempt to Hide and move on without any potential loot \n" +
-                            "2. Fight " + currentEnemy.Name);
+                            "2. Fight the beast");
                         userInput = Console.ReadLine();
                         switch (userInput)
                         {
@@ -167,7 +174,8 @@ namespace TerminalDungeon
                                 Hide();
                                 break;
                             case "2":
-                                
+                                StartCombat();
+                                break;
                         }
                         break;
 
@@ -232,7 +240,109 @@ namespace TerminalDungeon
 
         public void StartCombat()
         {
-            Console.WriteLine("fighting lolz");
+            Enemy currentEnemy = new Enemy().GetEnemy();
+
+            Console.WriteLine("The beast sees you! Get prepared to fight a " + currentEnemy);
+            Console.ReadLine();
+
+            while(currentPlayer.Health > 0 && currentEnemy.Health > 0)
+            {
+                if (currentPlayer.Speed >= currentEnemy.Speed)
+                {
+                    int playerRoll = Roll();
+                    if(playerRoll > 6)
+                    {
+                        currentEnemy.Health = currentEnemy.Health - currentPlayer.Damage;
+                    }
+                    else
+                    {
+                        Console.WriteLine("The " + currentEnemy + " evaded your attack!");
+                    }
+                }
+                else
+                {
+                    if(currentPlayer.Speed < currentEnemy.Speed)
+                    {
+                        currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
+                    }
+                    else
+                    {
+                        Console.WriteLine("The " + currentEnemy + " missed!");
+                    }
+                }
+            }
+            if(currentPlayer.Health <= 0)
+            {
+                playerIsAlive = false;
+            }
+            else if(currentEnemy.Health <= 0)
+            {
+                RewardPlayer();
+            }
+        }
+
+        public void RewardPlayer()
+        {
+            string[] rewards = { "weapon", "armor", "speedPotion" };
+            bool rewardEarned = false;
+
+            Random random = new Random();
+            int randomKey = (random.Next(0, rewards.Count()));
+            string playerReward = rewards[randomKey];
+
+            while (rewardEarned == false)
+            {
+                switch (playerReward)
+                {
+                    case "weapon":
+                        Console.WriteLine("Congratulations!! You found a new weapon!");
+                        currentPlayer.Damage = currentPlayer.Damage + 10;
+                        playerWeapons++;
+                        roomsCompleted++;
+                        rewardEarned = true;
+                        encounterComplete = true;
+                        break;
+                    case "armor":
+                        Console.WriteLine("Congratulations!! You found new armor!");
+                        currentPlayer.Health = currentPlayer.Health + 15;
+                        playerArmor++;
+                        Console.ReadLine();
+                        Console.WriteLine("Your new Life Total is: " + currentPlayer.Health);
+                        Console.ReadLine();
+                        roomsCompleted++;
+                        rewardEarned = true;
+                        encounterComplete = true;
+                        break;
+                    case "speedPotion":
+                        Console.WriteLine("Congratulations!! You found a speed potion! Your speed stat increased!");
+                        currentPlayer.Speed = currentPlayer.Speed + 5;
+                        Console.ReadLine();
+                        roomsCompleted++;
+                        rewardEarned = true;
+                        encounterComplete = true;
+                        break;
+                    default:
+                        Console.WriteLine("reward system broken");
+                        break;
+                }
+            }
+
+        }
+
+        public int Roll()
+        {
+            Random random = new Random();
+            int roll = random.Next(0, 21);
+            return roll;
+        }
+
+        public void GameOver()
+        {
+            Console.WriteLine("You have died! You completed " + roomsCompleted);
+            Console.ReadLine();
+            RunMenu();
         }
     }
 }
+
+
