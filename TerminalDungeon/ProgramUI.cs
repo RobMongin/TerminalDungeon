@@ -152,8 +152,23 @@ namespace TerminalDungeon
                         break;
 
                     case "Clearing":
-                        Console.WriteLine("The air feels nice in the open field.");
+                        Console.WriteLine("The air feels nice in the open field. You feel slightly faster");
                         currentPlayer.Speed = currentPlayer.Speed + 5;
+                        Console.ReadLine();
+                        Console.WriteLine("You see a " + currentEnemy.Name + "!");
+                        Console.ReadLine();
+                        Console.WriteLine("Would you like to: \n" +
+                            "1. Attempt to Hide and move on without any potential loot \n" +
+                            "2. Fight " + currentEnemy.Name);
+                        userInput = Console.ReadLine();
+                        switch (userInput)
+                        {
+                            case "1":
+                                Hide();
+                                break;
+                            case "2":
+                                
+                        }
                         break;
 
                     case "Poison Mushrooms":
@@ -205,12 +220,19 @@ namespace TerminalDungeon
 
             if (randomDice <= 8)
             {
+                Console.WriteLine("You hid from the beast! Press any key to move on.");
+                Console.ReadLine();
                 encounterComplete = true;
             }
             else
             {
-                //initiate combat
+                StartCombat();
             }
+        }
+
+        public void StartCombat()
+        {
+            Console.WriteLine("fighting lolz");
         }
     }
 }
