@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using TerminalDungeon;
 
 namespace TerminalDungeonTests
 {
@@ -7,8 +8,13 @@ namespace TerminalDungeonTests
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void GetEnemyTest()
         {
+            //Arrange
+            
+            //Act
+            
+            //Assert
         }
     }
 }

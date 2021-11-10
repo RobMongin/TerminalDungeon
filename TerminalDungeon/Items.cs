@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace TerminalDungeon
 {
-
-    class Program
+    class Items
     {
-        static void Main(string[] args)
-        {
-            ProgramUI ui = new ProgramUI();
-            ui.Run();
-        }
     }
 }

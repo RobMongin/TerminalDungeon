@@ -13,13 +13,12 @@ namespace TerminalDungeon
         public int Health { get; set; }
         public int Speed { get; set; }
 
-
         public Player()
         {
             this.Health = 100;
             this.Damage = 20;
             this.Speed = 15;
-
+            //setting default values for player
         }
     }
 }
