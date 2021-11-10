@@ -12,8 +12,8 @@ namespace TerminalDungeon
 
         public bool playerIsAlive = true;
         public bool continueToRun = true;
-        public bool encounterComplete = false;
-        
+        public bool encounterComplete = true;
+
         public int playerWeapons = 0;
         public int playerArmor = 0;
         public int roomsCompleted = 0;
@@ -60,9 +60,10 @@ namespace TerminalDungeon
             Console.ReadKey();
             while (playerIsAlive == true)
             {
-                if(encounterComplete == false)
+                if (encounterComplete == true)
                 {
                     CreateEncounter();
+                    
                 }
             }
         }
@@ -102,8 +103,22 @@ namespace TerminalDungeon
         private void CreateEncounter()
         {
             Room currentRoom = new Room().CreateRoom();
-            
+            encounterComplete = false;
 
+            bool playerHasWeapon = false;
+            bool playerHasArmor = false;
+            bool removeWeapon = true;
+            bool removeArmor = true;
+
+            if (playerWeapons > 0)
+            {
+                playerHasWeapon = true;
+            }
+
+            if (playerWeapons > 0)
+            {
+                playerHasArmor = true;
+            }
 
             while (encounterComplete == false)
             {
@@ -185,42 +200,105 @@ namespace TerminalDungeon
                         Console.ReadLine();
                         Console.WriteLine("Your new life total is: " + currentPlayer.Health);
                         Console.ReadLine();
+                        Console.WriteLine("You see something moving up ahead!");
+                        Console.ReadLine();
+                        Console.WriteLine("Would you like to: \n" +
+                            "1. Attempt to Hide and move on without any potential loot \n" +
+                            "2. Fight the beast");
+                        userInput = Console.ReadLine();
+                        switch (userInput)
+                        {
+                            case "1":
+                                Hide();
+                                break;
+                            case "2":
+                                StartCombat();
+                                break;
+                        }
                         break;
 
                     case "DeepMud":
                         Console.WriteLine("It must have rained recently. You feel slow in the mud.");
                         currentPlayer.Speed = currentPlayer.Speed - 5;
                         Console.ReadLine();
+                        Console.WriteLine("You see something moving up ahead!");
+                        Console.ReadLine();
+                        Console.WriteLine("Would you like to: \n" +
+                            "1. Attempt to Hide and move on without any potential loot \n" +
+                            "2. Fight the beast");
+                        userInput = Console.ReadLine();
+                        switch (userInput)
+                        {
+                            case "1":
+                                Hide();
+                                break;
+                            case "2":
+                                StartCombat();
+                                break;
+                        }
                         break;
 
                     case "Small Cave":
                         Console.WriteLine("You've stumbled into a dark cave. It's hard to see.");
-                        if (playerWeapons >= 1)
+                        if (playerHasWeapon == true && removeWeapon == true)
                         {
                             Console.WriteLine("It's dark. You dropped a weapon and can't find it");
                             playerWeapons--;
                             currentPlayer.Damage = currentPlayer.Damage - 10;
+                            removeWeapon = false;
                         }
-                        else { }
+                        Console.WriteLine("You see something moving up ahead!");
+                        Console.ReadLine();
+                        Console.WriteLine("Would you like to: \n" +
+                            "1. Attempt to Hide and move on without any potential loot \n" +
+                            "2. Fight the beast");
+                        userInput = Console.ReadLine();
+                        switch (userInput)
+                        {
+                            case "1":
+                                Hide();
+                                break;
+                            case "2":
+                                StartCombat();
+                                break;
+                        }
                         break;
 
                     case "Heavy Fog":
                         Console.WriteLine("A heavy fog is rolling in. Watch your step!");
-                        if (playerArmor >= 1)
+                        if (playerHasArmor == true && removeArmor == true)
                         {
                             Console.WriteLine("You lost a piece of your armor! You can't seem to find it.");
                             currentPlayer.Health = currentPlayer.Health - 15;
                             Console.ReadLine();
                             Console.WriteLine("You're more vulnerable now and have " + currentPlayer.Health + " life left");
+                            removeArmor = false;
+                        }
+                        Console.WriteLine("You see something moving up ahead!");
+                        Console.ReadLine();
+                        Console.WriteLine("Would you like to: \n" +
+                            "1. Attempt to Hide and move on without any potential loot \n" +
+                            "2. Fight the beast");
+                        userInput = Console.ReadLine();
+                        switch (userInput)
+                        {
+                            case "1":
+                                Hide();
+                                break;
+                            case "2":
+                                StartCombat();
+                                break;
                         }
                         break;
 
                     default:
-                        Console.WriteLine("game broken");
+                        Console.WriteLine("Something broke");
+                        Console.ReadLine();
                         break;
                 }
             }
         }
+
         public void Hide()
         {
             Random dice = new Random();
@@ -234,6 +312,7 @@ namespace TerminalDungeon
             }
             else
             {
+                Console.WriteLine("The beast saw you!!!");
                 StartCombat();
             }
         }
@@ -242,15 +321,15 @@ namespace TerminalDungeon
         {
             Enemy currentEnemy = new Enemy().GetEnemy();
 
-            Console.WriteLine("The beast sees you! Get prepared to fight a " + currentEnemy);
+            Console.WriteLine("The beast sees you! Get prepared to fight a " + currentEnemy.Name + "!");
             Console.ReadLine();
 
-            while(currentPlayer.Health > 0 && currentEnemy.Health > 0)
+            while (currentPlayer.Health > 0 && currentEnemy.Health > 0)
             {
                 if (currentPlayer.Speed >= currentEnemy.Speed)
                 {
                     int playerRoll = Roll();
-                    if(playerRoll > 6)
+                    if (playerRoll > 6)
                     {
                         currentEnemy.Health = currentEnemy.Health - currentPlayer.Damage;
                     }
@@ -261,7 +340,7 @@ namespace TerminalDungeon
                 }
                 else
                 {
-                    if(currentPlayer.Speed < currentEnemy.Speed)
+                    if (currentPlayer.Speed < currentEnemy.Speed)
                     {
                         currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
                     }
@@ -271,11 +350,11 @@ namespace TerminalDungeon
                     }
                 }
             }
-            if(currentPlayer.Health <= 0)
+            if (currentPlayer.Health <= 0)
             {
                 playerIsAlive = false;
             }
-            else if(currentEnemy.Health <= 0)
+            else if (currentEnemy.Health <= 0)
             {
                 RewardPlayer();
             }

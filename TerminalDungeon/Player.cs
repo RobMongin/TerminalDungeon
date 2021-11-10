@@ -20,5 +20,7 @@ namespace TerminalDungeon
             this.Speed = 15;
             //setting default values for player
         }
+        
+
     }
 }

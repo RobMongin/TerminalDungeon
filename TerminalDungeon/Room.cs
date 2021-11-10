@@ -15,9 +15,9 @@ namespace TerminalDungeon
             {"Treaure Room", new Room("Treasure Room!",false,false,true)},
             {"Poison Mushrooms", new Room("Mushroom Patch", true, true, true)},
             {"Deep Mud", new Room("Muddy Path", true, true, true)},
-            {"Clearing", new Room("Clearing", false, true, false)},
+            {"Clearing", new Room("Clearing", false, true, true)},
             {"Small Cave", new Room("Small Cave", true, true, true)},
-            {"Heavy Fog", new Room("Heavy Fog", true, false, false) } //lose an item
+            {"Heavy Fog", new Room("Heavy Fog", true, false, false) } 
         };
 
         public Room(){}

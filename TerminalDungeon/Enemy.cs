@@ -11,8 +11,16 @@ namespace TerminalDungeon
     {
         private static Dictionary<string, Enemy> _enemies = new Dictionary<string, Enemy>
         {
-            {"Troll", new Enemy("Troll",40,20,5) },
-            {"Centaur", new Enemy("Centaur",30,15,20) }
+            {"Troll", new Enemy("Troll",35,20,5) },
+            {"Centaur", new Enemy("Centaur",30,15,20) },
+            {"Giant Toad", new Enemy("Giant Toad",20,20,5) },
+            {"Chimera", new Enemy("Chimera", 30, 15, 25) },
+            {"Treant", new Enemy("Treant",40,20,1) },
+            {"Ogre", new Enemy("Ogre",35, 25, 5) },
+            {"Witch", new Enemy("Witch", 20, 10, 25) },
+            {"Savage Bear", new Enemy("Savage Bear",30, 20, 10) },
+            {"Wild Boar", new Enemy("Wild Boar", 15, 10, 10) },
+            {"Giant Snake", new Enemy("Giant Snake", 15, 15, 15) }
         };
 
         public Enemy() { }
@@ -38,8 +46,6 @@ namespace TerminalDungeon
             //Using random number to select enemy from Dictionary 
             KeyValuePair<string, Enemy> keyValuePair = _enemies.ElementAt(randomKey);
             Enemy generatedEnemy = keyValuePair.Value;
-            Console.WriteLine(generatedEnemy.Name);
-            Console.WriteLine(randomKey);
             return generatedEnemy;
         }
     }
