@@ -11,26 +11,9 @@ namespace TerminalDungeon
         public static Player currentPlayer = new Player();
         public bool playerIsAlive = true;
 
-        private static Dictionary<string, Room> _rooms = new Dictionary<string, Room>
-        {
-            {"Treaure Room", new Room("Treasure Room!",false,false,true)},
-            {"Poison Mushrooms", new Room("Mushroom Patch", true, true, true)},
-            {"Deep Mud", new Room("Muddy Path", true, true, true)},
-            {"Clearing", new Room("Clearing", false, true, false)},
-            {"Small Cave", new Room("Small Cave", true, true, true)},
-            {"Heavy Fog", new Room("Heavy Fog", true, false, false) } //lose an item
-        };
-
-        private static Dictionary<string, Enemy> _enemies = new Dictionary<string, Enemy>
-        {
-            {"Troll", new Enemy("Troll",40,20,5) },
-            {"Centaur", new Enemy("Centaur",30,15,20) }
-        };
-
         public void Run()
         {
             RunMenu();
-            
         }
 
         private void RunMenu()
@@ -44,7 +27,7 @@ namespace TerminalDungeon
                  "1. New Game \n" +
                  "2. Exit Game");
                 string userInput = Console.ReadLine().ToLower();
-                switch(userInput)
+                switch (userInput)
                 {
                     case "1":
                     case "one":
@@ -59,7 +42,7 @@ namespace TerminalDungeon
                         Console.ReadKey();
                         break;
                 }
-                    
+
             }
         }
         private void StartGame()
@@ -68,9 +51,15 @@ namespace TerminalDungeon
             Console.ReadKey();
             TitleScreen();
             Console.ReadKey();
-            GetEnemy();
-            Console.ReadKey();
-            
+            while (playerIsAlive == true)
+            {
+                CreateEncounter();
+            }
+            else
+            {
+                //game over method
+            }
+
         }
 
         private void GetPlayer()
@@ -103,36 +92,17 @@ namespace TerminalDungeon
             Console.WriteLine("Press any key to start");
         }
 
-        private Room CreateRoom()
-        {
-            //Getting random number for room dictionary
-            Random random = new Random();
-            int randomKey = (random.Next(0, _rooms.Count()));
 
-            //Getting dictionary element by random number
-            KeyValuePair<string, Room> keyValuePair = _rooms.ElementAt(randomKey);
-            Room generatedRoom = keyValuePair.Value;
-            return generatedRoom;  
-        }
-
-        private Enemy GetEnemy()
-        {
-            //This is getting a random number between 0 and amount of _enemies
-            Random random = new Random();
-            int randomKey = (random.Next(0, _enemies.Count()));
-
-            //Using random number to select enemy from Dictionary 
-            KeyValuePair<string, Enemy> keyValuePair = _enemies.ElementAt(randomKey);
-            Enemy generatedEnemy = keyValuePair.Value;
-            Console.WriteLine(generatedEnemy.Name);
-            Console.WriteLine(randomKey);
-            return generatedEnemy;
-
-        }
 
         private void CreateEncounter()
         {
+            Room currentRoom = new Room().CreateRoom();
+            Enemy currentEnemy = new Enemy().GetEnemy();
 
+            if (currentRoom.StatusEffect == true)
+            {
+                
+            }
         }
     }
 }

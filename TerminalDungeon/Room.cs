@@ -20,6 +20,7 @@ namespace TerminalDungeon
             {"Heavy Fog", new Room("Heavy Fog", true, false, false) } //lose an item
         };
 
+        public Room(){}
         public Room(string name, bool statusEffect, bool enemyIsAlive, bool hasReward)
         {
             Name = name;
@@ -32,7 +33,7 @@ namespace TerminalDungeon
         public bool EnemyIsALive { get; set; }
         public bool HasReward { get; set; }
 
-        private Room CreateRoom()
+        public Room CreateRoom()
         {
             //Getting random number for room dictionary
             Random random = new Random();
