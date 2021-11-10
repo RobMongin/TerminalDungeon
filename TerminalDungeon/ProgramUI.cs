@@ -10,6 +10,10 @@ namespace TerminalDungeon
     {
         public static Player currentPlayer = new Player();
         public bool playerIsAlive = true;
+        public bool continueToRun = true;
+        public int playerWeapons = 0;
+        public int playerArmor = 0;
+        public int playerSpeedPotions = 0;
 
         public void Run()
         {
@@ -18,7 +22,6 @@ namespace TerminalDungeon
 
         private void RunMenu()
         {
-            bool continueToRun = true;
             while (continueToRun)
             {
                 Console.Clear();
@@ -55,11 +58,6 @@ namespace TerminalDungeon
             {
                 CreateEncounter();
             }
-            else
-            {
-                //game over method
-            }
-
         }
 
         private void GetPlayer()
@@ -98,10 +96,91 @@ namespace TerminalDungeon
         {
             Room currentRoom = new Room().CreateRoom();
             Enemy currentEnemy = new Enemy().GetEnemy();
+            bool encounterComplete = false;
 
-            if (currentRoom.StatusEffect == true)
+            while (encounterComplete == false)
             {
-                
+                if (currentRoom.StatusEffect == true)
+                {
+                    switch (currentRoom.Name)
+                    {
+                        case "Treasure Room":
+                            Console.WriteLine("You found a treasure room! What luck!");
+                            break;
+
+                        case "Clearing":
+                            Console.WriteLine("The air feels nice in the open field.");
+                            currentPlayer.Speed = currentPlayer.Speed + 5;
+                            break;
+
+                        case "Poison Mushrooms":
+                            Console.WriteLine("You're surrounded by poison mushrooms. You feel ill. Lose 5hp.");
+                            currentPlayer.Health = currentPlayer.Health - 5;
+                            Console.ReadLine();
+                            Console.WriteLine("Your new life total is: " + currentPlayer.Health);
+                            Console.ReadLine();
+                            break;
+
+                        case "DeepMud":
+                            Console.WriteLine("It must have rained recently. You feel slow in the mud.");
+                            currentPlayer.Speed = currentPlayer.Speed - 5;
+                            Console.ReadLine();
+                            break;
+                        
+                        case "Small Cave":
+                            Console.WriteLine("You've stumbled into a dark cave. It's hard to see.");
+                            if (playerArmor >= 1)
+                            {
+                                Console.WriteLine("It's dark. You dropped a weapon and can't find it");
+                                playerWeapons--;
+                                currentPlayer.Damage = currentPlayer.Damage - 10;
+                            }
+                            else { }
+                            break;
+
+                        case "Heavy Fog":
+                            Console.WriteLine("A heavy fog is rolling in. Watch your step!");
+                            if (playerArmor >= 1)
+                            {
+                                Console.WriteLine("You lost a piece of your armor! You can't seem to find it.");
+                                currentPlayer.Health = currentPlayer.Health - 15;
+                                Console.ReadLine();
+                                Console.WriteLine("You're more vulnerable now and have " + currentPlayer.Health + " life left");
+                            }
+                            break;
+                              
+                        default:
+                            Console.WriteLine("game broken");
+                            break;
+                    }
+                }
+                else if (currentRoom.StatusEffect == false)
+                {
+                    switch (currentRoom.Name)
+                    {
+                        case "Treasure Room":
+                            Console.WriteLine("You found a treasure room! What luck!");
+                            break;
+
+                        case "Clearing":
+                            Console.WriteLine("The air feels nice in the open field.");
+                            currentPlayer.Speed = currentPlayer.Speed + 5;
+                            break;
+                        default:
+                            Console.WriteLine("game broken");
+                            break;
+                    }
+                }
+                if (currentRoom.HasEnemy == true)
+                {
+                    Console.WriteLine("A " + currentEnemy.Name + " has appeared!");
+                    Console.ReadLine();
+
+                }
+                else
+                {
+                    //you find items
+                }
             }
         }
     }

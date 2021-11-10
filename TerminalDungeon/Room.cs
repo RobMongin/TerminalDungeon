@@ -21,16 +21,16 @@ namespace TerminalDungeon
         };
 
         public Room(){}
-        public Room(string name, bool statusEffect, bool enemyIsAlive, bool hasReward)
+        public Room(string name, bool statusEffect, bool hasEnemy, bool hasReward)
         {
             Name = name;
             StatusEffect = statusEffect;
-            EnemyIsALive = enemyIsAlive;
+            HasEnemy = hasEnemy;
             HasReward = hasReward;
         }
         public string Name { get; set; }
         public bool StatusEffect { get; set; }
-        public bool EnemyIsALive { get; set; }
+        public bool HasEnemy { get; set; }
         public bool HasReward { get; set; }
 
         public Room CreateRoom()
