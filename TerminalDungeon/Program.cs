@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalDungeon.UI;
 
 namespace TerminalDungeon
 {
@@ -11,7 +12,8 @@ namespace TerminalDungeon
     {
         static void Main(string[] args)
         {
-            ProgramUI ui = new ProgramUI();
+            IConsole console = new AestheticsConsole();
+            ProgramUI ui = new ProgramUI(console);
             ui.Run();
         }
     }

@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalDungeon.UI;
 
 namespace TerminalDungeon
 {
     public class ProgramUI
     {
+        private readonly IConsole _console;
+
+        public ProgramUI(IConsole console)
+        {
+            _console = console;
+        }
+
         public static Player currentPlayer = new Player();
 
         public bool playerIsAlive = true;
@@ -31,7 +39,7 @@ namespace TerminalDungeon
             {
                 Console.Clear();
                 Console.WriteLine(
-                 "Enter the number of the option you'd like to select: \n" +
+                 "Enter the number of the option you'd like to select and press Enter: \n" +
                  "1. New Game \n" +
                  "2. Exit Game");
                 string userInput = Console.ReadLine().ToLower();
@@ -66,7 +74,7 @@ namespace TerminalDungeon
 
         private void GetPlayer()
         {
-            Console.WriteLine("Enter a name for our hero: ");
+            Console.WriteLine("Enter a name for our hero and press Enter: ");
             currentPlayer.Name = Console.ReadLine();
             if (currentPlayer.Name == "")
             {
@@ -75,13 +83,25 @@ namespace TerminalDungeon
             }
             else
             {
-                Console.WriteLine(" Press any key to play FeyWild");
+                Console.WriteLine(" Press Enter to play FeyWild");
             }
         }
 
         private void TitleScreen()
         {
-            Console.WriteLine("FeyWild");
+            Console.WriteLine(@"
+ _______  _______                   _________ _        ______  
+(  ____ \(  ____ \|\     /||\     /|\__   __/( \      (  __  \ 
+| (    \/| (    \/( \   / )| )   ( |   ) (   | (      | (  \  )
+| (__    | (__     \ (_) / | | _ | |   | |   | |      | |   ) |
+|  __)   |  __)     \   /  | |( )| |   | |   | |      | |   | |
+| (      | (         ) (   | || || |   | |   | |      | |   ) |
+| )      | (____/\   | |   | () () |___) (___| (____/\| (__/  )
+|/       (_______/   \_/   (_______)\_______/(_______/(______/ 
+                                                               
+");
+            Console.WriteLine("Press Enter to move through the program. /n" + "Some reminders have been left for you.");
+
             Console.ReadKey();
             Console.WriteLine("Welcome " + currentPlayer.Name + "!");
             Console.ReadKey();
@@ -89,9 +109,12 @@ namespace TerminalDungeon
             Console.ReadKey();
             Console.WriteLine("Be weary though, not all creatures are as friendly as the fairies");
             Console.ReadKey();
-            Console.WriteLine("You will encounter many enemies and hazardous conditions.\n" + "How far can you make it through FeyWild?");
+            Console.WriteLine("You will encounter many enemies and hazardous conditions.");
+            Console.ReadLine();
+            Console.WriteLine("This is an endless dungeon meaning it only ends when the player dies!");
             Console.ReadKey();
-            Console.WriteLine("Press any key to start");
+            Console.WriteLine("How far can you make it through FeyWild?");
+            Console.WriteLine("Press Enter to start");
         }
 
 
@@ -99,6 +122,7 @@ namespace TerminalDungeon
         private void CreateEncounter()
         {
             Console.Clear();
+            Console.WriteLine("Press Enter to move through the program.");
 
             Room currentRoom = new Room().CreateRoom();
 
@@ -121,12 +145,13 @@ namespace TerminalDungeon
 
             while (encounterComplete == false && playerIsAlive == true)
             {
-               
+
                 switch (currentRoom.Name)
                 {
                     case "Treasure Room!":
                         {
                             Console.WriteLine("You found a treasure chest! What luck!");
+                            Console.WriteLine("Press Enter to continue.");
                             roomsCompleted++;
                             Console.ReadLine();
                             RewardPlayer();
@@ -136,6 +161,7 @@ namespace TerminalDungeon
                     case "Clearing":
                         Console.WriteLine("The air feels nice in the open field. You feel slightly faster");
                         currentPlayer.Speed = currentPlayer.Speed + 5;
+                        Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
@@ -157,6 +183,7 @@ namespace TerminalDungeon
                     case "Mushroom Patch":
                         Console.WriteLine("You're surrounded by poison mushrooms. You feel ill. Lose 10 Life.");
                         currentPlayer.Health = currentPlayer.Health - 10;
+                        Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         Console.WriteLine("Your new life total is: " + currentPlayer.Health);
                         Console.ReadLine();
@@ -188,6 +215,7 @@ namespace TerminalDungeon
                     case "Muddy Path":
                         Console.WriteLine("It must have rained recently. You feel slow in the mud.");
                         currentPlayer.Speed = currentPlayer.Speed - 10;
+                        Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
@@ -218,6 +246,7 @@ namespace TerminalDungeon
                             currentPlayer.Damage = currentPlayer.Damage - 10;
                             removeWeapon = false;
                         }
+                        Console.WriteLine("Press Enter to continue.");
                         Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
                         Console.WriteLine("Would you like to: \n" +
@@ -253,6 +282,7 @@ namespace TerminalDungeon
                             Console.WriteLine("You're more vulnerable now and have " + currentPlayer.Health + " life left");
                             removeArmor = false;
                         }
+                        Console.WriteLine("Press Enter to continue.");
                         Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
                         Console.WriteLine("Would you like to: \n" +
@@ -295,7 +325,7 @@ namespace TerminalDungeon
             }
             else
             {
-                Console.WriteLine("The beast saw you!!!");
+                Console.WriteLine("The beast has fixated on you!!!");
                 StartCombat();
             }
         }
@@ -307,8 +337,9 @@ namespace TerminalDungeon
             int enemyHealth = currentEnemy.Health;
 
             Console.WriteLine("The beast sees you! Get prepared to fight a " + currentEnemy.Name + "!");
-            Console.WriteLine(currentEnemy.Health);
-            Console.WriteLine(currentPlayer.Damage);
+            Console.WriteLine(" Press Enter to continue");
+            /*Console.WriteLine(currentEnemy.Health);
+            Console.WriteLine(currentPlayer.Damage);*/
             Console.ReadLine();
 
             bool playerCanFight = true;
@@ -419,6 +450,7 @@ namespace TerminalDungeon
                 {
                     case "weapon":
                         Console.WriteLine("Congratulations!! You found a new weapon!");
+                        Console.WriteLine(" Press Enter to continue");
                         currentPlayer.Damage = currentPlayer.Damage + 10;
                         playerWeapons++;
                         Console.ReadLine();
@@ -428,6 +460,7 @@ namespace TerminalDungeon
                         break;
                     case "armor":
                         Console.WriteLine("Congratulations!! You found new armor!");
+                        Console.WriteLine(" Press Enter to continue");
                         currentPlayer.Health = currentPlayer.Health + 15;
                         playerArmor++;
                         Console.ReadLine();
@@ -439,6 +472,7 @@ namespace TerminalDungeon
                         break;
                     case "speedPotion":
                         Console.WriteLine("Congratulations!! You found a speed potion! Your speed stat increased!");
+                        Console.WriteLine(" Press Enter to continue");
                         currentPlayer.Speed = currentPlayer.Speed + 5;
                         Console.ReadLine();
                         rewardEarned = true;
@@ -463,6 +497,7 @@ namespace TerminalDungeon
         public void GameOver()
         {
             Console.WriteLine("You have died! You completed " + roomsCompleted + " rooms");
+            Console.WriteLine(" Press Enter to go back to main menu");
             Console.ReadLine();
             RunMenu();
         }
