@@ -12,7 +12,7 @@ namespace TerminalDungeon
 
         public bool playerIsAlive = true;
         public bool continueToRun = true;
-        public bool encounterComplete = true;
+        public bool encounterComplete = false;
 
         public int playerWeapons = 0;
         public int playerArmor = 0;
@@ -26,7 +26,8 @@ namespace TerminalDungeon
 
         private void RunMenu()
         {
-            while (continueToRun)
+            playerIsAlive = true;
+            while (continueToRun == true)
             {
                 Console.Clear();
                 Console.WriteLine(
@@ -58,14 +59,9 @@ namespace TerminalDungeon
             Console.ReadKey();
             TitleScreen();
             Console.ReadKey();
-            while (playerIsAlive == true)
-            {
-                if (encounterComplete == true)
-                {
-                    CreateEncounter();
-                    
-                }
-            }
+            CreateEncounter();
+            Console.ReadKey();
+
         }
 
         private void GetPlayer()
@@ -79,7 +75,7 @@ namespace TerminalDungeon
             }
             else
             {
-                Console.WriteLine(" Press any key to enter FeyWild");
+                Console.WriteLine(" Press any key to play FeyWild");
             }
         }
 
@@ -102,8 +98,11 @@ namespace TerminalDungeon
 
         private void CreateEncounter()
         {
+            Console.Clear();
+
             Room currentRoom = new Room().CreateRoom();
-            encounterComplete = false;
+
+            string userInput = Console.ReadLine();
 
             bool playerHasWeapon = false;
             bool playerHasArmor = false;
@@ -115,62 +114,23 @@ namespace TerminalDungeon
                 playerHasWeapon = true;
             }
 
-            if (playerWeapons > 0)
+            if (playerArmor > 0)
             {
                 playerHasArmor = true;
             }
 
-            while (encounterComplete == false)
+            while (encounterComplete == false && playerIsAlive == true)
             {
+               
                 switch (currentRoom.Name)
                 {
-                    case "Treasure Room":
-                        Console.WriteLine("You found a treasure room! What luck!");
-                        Console.ReadLine();
-                        Console.WriteLine("Enter the number of the item you'd like to take from the treasure room! \n" +
-                            "1. Armor (Increases Life Total) \n" +
-                            "2. Weapon (Increases Damage) \n" +
-                            "3. Speed Potion (Increases Speed) \n");
-                        string userInput = Console.ReadLine();
-                        switch (userInput)
+                    case "Treasure Room!":
                         {
-                            case "1":
-                                playerArmor++;
-                                currentPlayer.Health = currentPlayer.Health + 15;
-                                Console.WriteLine(" You chose armor! You gain 15 health.");
-                                Console.ReadLine();
-                                Console.WriteLine("Your new life total is: " + currentPlayer.Health);
-                                Console.ReadLine();
-                                Console.WriteLine("Press any key to move on.");
-                                Console.ReadLine();
-                                roomsCompleted++;
-                                encounterComplete = true;
-                                break;
-                            case "2":
-                                playerWeapons++;
-                                currentPlayer.Damage = currentPlayer.Damage + 10;
-                                Console.WriteLine(" You chose a new weapon! You gain 10 damage.");
-                                Console.ReadLine();
-                                Console.WriteLine("Press any key to move on.");
-                                Console.ReadLine();
-                                roomsCompleted++;
-                                encounterComplete = true;
-                                break;
-                            case "3":
-                                currentPlayer.Speed = currentPlayer.Speed + 5;
-                                Console.WriteLine(" You chose the speed potion! You have a higher chance of attacking first.");
-                                Console.ReadLine();
-                                Console.WriteLine("Press any key to move on.");
-                                Console.ReadLine();
-                                roomsCompleted++;
-                                encounterComplete = true;
-                                break;
-                            default:
-                                Console.WriteLine("Please pick a valid number between 1-3");
-                                Console.ReadKey();
-                                break;
+                            Console.WriteLine("You found a treasure chest! What luck!");
+                            roomsCompleted++;
+                            Console.ReadLine();
+                            RewardPlayer();
                         }
-
                         break;
 
                     case "Clearing":
@@ -194,12 +154,17 @@ namespace TerminalDungeon
                         }
                         break;
 
-                    case "Poison Mushrooms":
-                        Console.WriteLine("You're surrounded by poison mushrooms. You feel ill. Lose 5hp.");
-                        currentPlayer.Health = currentPlayer.Health - 5;
+                    case "Mushroom Patch":
+                        Console.WriteLine("You're surrounded by poison mushrooms. You feel ill. Lose 10 Life.");
+                        currentPlayer.Health = currentPlayer.Health - 10;
                         Console.ReadLine();
                         Console.WriteLine("Your new life total is: " + currentPlayer.Health);
                         Console.ReadLine();
+                        if (currentPlayer.Health < 1)
+                        {
+                            playerIsAlive = false;
+                            GameOver();
+                        }
                         Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
                         Console.WriteLine("Would you like to: \n" +
@@ -213,13 +178,16 @@ namespace TerminalDungeon
                                 break;
                             case "2":
                                 StartCombat();
+                                break;
+                            default:
+                                Console.WriteLine("You must choose an option");
                                 break;
                         }
                         break;
 
-                    case "DeepMud":
+                    case "Muddy Path":
                         Console.WriteLine("It must have rained recently. You feel slow in the mud.");
-                        currentPlayer.Speed = currentPlayer.Speed - 5;
+                        currentPlayer.Speed = currentPlayer.Speed - 10;
                         Console.ReadLine();
                         Console.WriteLine("You see something moving up ahead!");
                         Console.ReadLine();
@@ -234,6 +202,9 @@ namespace TerminalDungeon
                                 break;
                             case "2":
                                 StartCombat();
+                                break;
+                            default:
+                                Console.WriteLine("You must choose an option");
                                 break;
                         }
                         break;
@@ -261,6 +232,9 @@ namespace TerminalDungeon
                             case "2":
                                 StartCombat();
                                 break;
+                            default:
+                                Console.WriteLine("You must choose an option");
+                                break;
                         }
                         break;
 
@@ -269,8 +243,13 @@ namespace TerminalDungeon
                         if (playerHasArmor == true && removeArmor == true)
                         {
                             Console.WriteLine("You lost a piece of your armor! You can't seem to find it.");
-                            currentPlayer.Health = currentPlayer.Health - 15;
+                            currentPlayer.Health = currentPlayer.Health - 10;
                             Console.ReadLine();
+                            if (currentPlayer.Health < 1)
+                            {
+                                playerIsAlive = false;
+                                GameOver();
+                            }
                             Console.WriteLine("You're more vulnerable now and have " + currentPlayer.Health + " life left");
                             removeArmor = false;
                         }
@@ -288,11 +267,14 @@ namespace TerminalDungeon
                             case "2":
                                 StartCombat();
                                 break;
+                            default:
+                                Console.WriteLine("You must choose an option");
+                                break;
                         }
                         break;
 
                     default:
-                        Console.WriteLine("Something broke");
+                        Console.WriteLine(currentRoom.Name + " is broken");
                         Console.ReadLine();
                         break;
                 }
@@ -304,11 +286,12 @@ namespace TerminalDungeon
             Random dice = new Random();
             int randomDice = (dice.Next(1, 21));
 
-            if (randomDice <= 8)
+            if (randomDice < 8)
             {
+                roomsCompleted++;
                 Console.WriteLine("You hid from the beast! Press any key to move on.");
                 Console.ReadLine();
-                encounterComplete = true;
+                CreateEncounter();
             }
             else
             {
@@ -321,42 +304,103 @@ namespace TerminalDungeon
         {
             Enemy currentEnemy = new Enemy().GetEnemy();
 
+            int enemyHealth = currentEnemy.Health;
+
             Console.WriteLine("The beast sees you! Get prepared to fight a " + currentEnemy.Name + "!");
+            Console.WriteLine(currentEnemy.Health);
+            Console.WriteLine(currentPlayer.Damage);
             Console.ReadLine();
 
-            while (currentPlayer.Health > 0 && currentEnemy.Health > 0)
+            bool playerCanFight = true;
+            bool enemyCanFight = true;
+
+            while (playerCanFight == true && enemyCanFight == true)
             {
-                if (currentPlayer.Speed >= currentEnemy.Speed)
+                int enemyRoll = Roll();
+                int playerRoll = Roll();
+                if (currentPlayer.Speed >= currentEnemy.Speed && playerRoll > 6 && enemyHealth > 0 && currentPlayer.Health > 0)
                 {
-                    int playerRoll = Roll();
-                    if (playerRoll > 6)
-                    {
-                        currentEnemy.Health = currentEnemy.Health - currentPlayer.Damage;
-                    }
-                    else
-                    {
-                        Console.WriteLine("The " + currentEnemy + " evaded your attack!");
-                    }
-                }
-                else
-                {
-                    if (currentPlayer.Speed < currentEnemy.Speed)
+                    enemyHealth = enemyHealth - currentPlayer.Damage;
+                    Console.WriteLine("You struck the " + currentEnemy.Name + ". It has " + enemyHealth + " life left.");
+                    Console.ReadLine();
+                    if (enemyRoll > 9 && enemyHealth > 0)
                     {
                         currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
+                        Console.WriteLine("The " + currentEnemy.Name + " struck you. You have " + currentPlayer.Health + " life remaining.");
+                        Console.ReadLine();
                     }
-                    else
+                    else if (enemyRoll < 9 && enemyHealth > 0)
                     {
-                        Console.WriteLine("The " + currentEnemy + " missed!");
+                        Console.WriteLine("The " + currentEnemy.Name + " missed.");
+                        Console.ReadLine();
                     }
                 }
-            }
-            if (currentPlayer.Health <= 0)
-            {
-                playerIsAlive = false;
-            }
-            else if (currentEnemy.Health <= 0)
-            {
-                RewardPlayer();
+                else if (currentPlayer.Speed >= currentEnemy.Speed && playerRoll < 6 && enemyHealth > 0 && currentPlayer.Health > 0)
+                {
+                    Console.WriteLine("Your attack missed!");
+                    Console.ReadLine();
+                    if (enemyRoll > 9 && currentEnemy.Health > 0)
+                    {
+                        currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
+                        Console.WriteLine("The " + currentEnemy.Name + " struck you. You have " + currentPlayer.Health + " life remaining.");
+                        Console.ReadLine();
+                    }
+                    else if (enemyRoll < 9 && enemyHealth > 0)
+                    {
+                        Console.WriteLine("The " + currentEnemy.Name + " missed.");
+                        Console.ReadLine();
+                    }
+                }
+                else if (currentEnemy.Speed > currentPlayer.Speed && enemyRoll > 9 && enemyHealth > 0 && currentPlayer.Health > 0)
+                {
+                    currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
+                    Console.WriteLine("The " + currentEnemy.Name + " struck you. You have " + currentPlayer.Health + " life remaining.");
+                    Console.ReadLine();
+                    if (playerRoll > 6 && currentPlayer.Health >= 1)
+                    {
+                        enemyHealth = enemyHealth - currentPlayer.Damage;
+                        Console.WriteLine("You struck the " + currentEnemy.Name + ". It has " + enemyHealth + " life left.");
+                        Console.ReadLine();
+                    }
+                    else if (playerRoll < 6 && currentPlayer.Health >= 1)
+                    {
+                        Console.WriteLine("Your attack missed!");
+                        Console.ReadLine();
+                    }
+                }
+                else if (currentEnemy.Speed > currentPlayer.Speed && enemyRoll < 9 && enemyHealth > 0 && currentPlayer.Health > 0)
+                {
+                    Console.WriteLine("The " + currentEnemy.Name + " missed.");
+                    Console.ReadLine();
+                    if (playerRoll > 6 && currentPlayer.Health >= 1)
+                    {
+                        enemyHealth = enemyHealth - currentPlayer.Damage;
+                        Console.WriteLine("You struck the " + currentEnemy.Name + ". It has " + enemyHealth + " life left.");
+                        Console.ReadLine();
+                    }
+                    else if (playerRoll < 6 && currentPlayer.Health >= 1)
+                    {
+                        Console.WriteLine("Your attack missed!");
+                        Console.ReadLine();
+                    }
+                }
+                else if (currentPlayer.Health < 1)
+                {
+                    playerIsAlive = false;
+                    playerCanFight = false;
+                    Console.WriteLine("the beast defeated you");
+                    Console.ReadLine();
+                    GameOver();
+                }
+                else if (enemyHealth < 1)
+                {
+                    roomsCompleted++;
+                    encounterComplete = true;
+                    enemyCanFight = false;
+                    Console.WriteLine("you beat the " + currentEnemy.Name);
+                    Console.ReadLine();
+                    RewardPlayer();
+                }
             }
         }
 
@@ -377,9 +421,10 @@ namespace TerminalDungeon
                         Console.WriteLine("Congratulations!! You found a new weapon!");
                         currentPlayer.Damage = currentPlayer.Damage + 10;
                         playerWeapons++;
-                        roomsCompleted++;
+                        Console.ReadLine();
                         rewardEarned = true;
-                        encounterComplete = true;
+                        encounterComplete = false;
+                        CreateEncounter();
                         break;
                     case "armor":
                         Console.WriteLine("Congratulations!! You found new armor!");
@@ -388,17 +433,17 @@ namespace TerminalDungeon
                         Console.ReadLine();
                         Console.WriteLine("Your new Life Total is: " + currentPlayer.Health);
                         Console.ReadLine();
-                        roomsCompleted++;
                         rewardEarned = true;
-                        encounterComplete = true;
+                        encounterComplete = false;
+                        CreateEncounter();
                         break;
                     case "speedPotion":
                         Console.WriteLine("Congratulations!! You found a speed potion! Your speed stat increased!");
                         currentPlayer.Speed = currentPlayer.Speed + 5;
                         Console.ReadLine();
-                        roomsCompleted++;
                         rewardEarned = true;
-                        encounterComplete = true;
+                        encounterComplete = false;
+                        CreateEncounter();
                         break;
                     default:
                         Console.WriteLine("reward system broken");
@@ -417,7 +462,7 @@ namespace TerminalDungeon
 
         public void GameOver()
         {
-            Console.WriteLine("You have died! You completed " + roomsCompleted);
+            Console.WriteLine("You have died! You completed " + roomsCompleted + " rooms");
             Console.ReadLine();
             RunMenu();
         }

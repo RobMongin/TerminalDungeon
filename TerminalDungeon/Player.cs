@@ -16,7 +16,7 @@ namespace TerminalDungeon
         public Player()
         {
             this.Health = 100;
-            this.Damage = 20;
+            this.Damage = 10;
             this.Speed = 15;
             //setting default values for player
         }
