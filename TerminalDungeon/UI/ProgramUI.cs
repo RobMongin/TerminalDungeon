@@ -18,20 +18,23 @@ namespace TerminalDungeon
 
         public static Player currentPlayer = new Player();
 
+        //bools used for logic
         public bool playerIsAlive = true;
         public bool continueToRun = true;
         public bool encounterComplete = false;
 
+        //ints used for game logic
         public int playerWeapons = 0;
         public int playerArmor = 0;
         public int roomsCompleted = 0;
 
-
+        
         public void Run()
         {
             RunMenu();
         }
 
+        //Main Menu before game officially starts option to quit 
         private void RunMenu()
         {
             playerIsAlive = true;
@@ -61,6 +64,8 @@ namespace TerminalDungeon
 
             }
         }
+
+        //Getting the game going
         private void StartGame()
         {
             GetPlayer();
@@ -72,6 +77,8 @@ namespace TerminalDungeon
 
         }
 
+        //Have player assign name to Player
+        //Runs a check that they didn't just hit Enter
         private void GetPlayer()
         {
             Console.WriteLine("Enter a name for our hero and press Enter: ");
@@ -87,6 +94,8 @@ namespace TerminalDungeon
             }
         }
 
+        //cool title, bit of narration, and intructions
+        //Loads before main gameplay
         private void TitleScreen()
         {
             Console.WriteLine(@"
@@ -100,25 +109,27 @@ namespace TerminalDungeon
 |/       (_______/   \_/   (_______)\_______/(_______/(______/ 
                                                                
 ");
-            Console.WriteLine("Press Enter to move through the program. /n" + "Some reminders have been left for you.");
+            Console.WriteLine("Press Enter to move through the program. \n" + "Some reminders have been left for you.");
 
-            Console.ReadKey();
-            Console.WriteLine("Welcome " + currentPlayer.Name + "!");
-            Console.ReadKey();
-            Console.WriteLine("FeyWild is a land of lights and wonder.");
-            Console.ReadKey();
-            Console.WriteLine("Be weary though, not all creatures are as friendly as the fairies");
-            Console.ReadKey();
-            Console.WriteLine("You will encounter many enemies and hazardous conditions.");
-            Console.ReadLine();
-            Console.WriteLine("This is an endless dungeon meaning it only ends when the player dies!");
-            Console.ReadKey();
-            Console.WriteLine("How far can you make it through FeyWild?");
+            _console.ReadLine();
+            _console.WriteLine("Welcome " + currentPlayer.Name + "!");
+            _console.ReadLine();
+            _console.WriteLine("FeyWild is a land of lights and wonder.");
+            _console.ReadLine();
+            _console.WriteLine("Be weary though, not all creatures are as friendly as the fairies");
+            _console.ReadLine();
+            _console.WriteLine("You will encounter many enemies and hazardous conditions.");
+            _console.ReadLine();
+            _console.WriteLine("This is an endless dungeon meaning it only ends when the player dies!");
+            _console.ReadLine();
+            _console.WriteLine("How far can you make it through FeyWild?");
             Console.WriteLine("Press Enter to start");
         }
 
 
-
+        //creating an encounter with enemy by creating a room first
+        //room chosen at random from dictionary
+        //some rooms have specials
         private void CreateEncounter()
         {
             Console.Clear();
@@ -145,7 +156,7 @@ namespace TerminalDungeon
 
             while (encounterComplete == false && playerIsAlive == true)
             {
-
+                //switch case to apply condition affects based on individual room
                 switch (currentRoom.Name)
                 {
                     case "Treasure Room!":
@@ -311,6 +322,7 @@ namespace TerminalDungeon
             }
         }
 
+        //give option to potentially hide. RNG on success
         public void Hide()
         {
             Random dice = new Random();
@@ -330,6 +342,7 @@ namespace TerminalDungeon
             }
         }
 
+        //combat with enemy. highest speed attacks first. hit/miss determined by D20 odds
         public void StartCombat()
         {
             Enemy currentEnemy = new Enemy().GetEnemy();
@@ -435,6 +448,8 @@ namespace TerminalDungeon
             }
         }
 
+        //give players rewards for treasure chest and defeating enememies
+        //rewards are RNG 
         public void RewardPlayer()
         {
             string[] rewards = { "weapon", "armor", "speedPotion" };
@@ -487,6 +502,7 @@ namespace TerminalDungeon
 
         }
 
+        //little dice roll to help with combat
         public int Roll()
         {
             Random random = new Random();
@@ -494,6 +510,7 @@ namespace TerminalDungeon
             return roll;
         }
 
+        //ending the game at 0 life
         public void GameOver()
         {
             Console.WriteLine("You have died! You completed " + roomsCompleted + " rooms");

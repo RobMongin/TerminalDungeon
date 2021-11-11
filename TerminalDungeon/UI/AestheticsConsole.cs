@@ -41,12 +41,13 @@ namespace TerminalDungeon.UI
 
         public void WriteLine(string s)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(s);
+            Console.ForegroundColor = ConsoleColor.Green;
         }
 
         public void WriteLine(object o)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(o);
         }
     }
 }
