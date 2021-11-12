@@ -11,7 +11,6 @@ namespace TerminalDungeon.UI
         ConsoleKeyInfo ReadKey();
         string ReadLine();
         void Clear();
-        
         void WriteLine(string s);
         void WriteLine(object o);
 

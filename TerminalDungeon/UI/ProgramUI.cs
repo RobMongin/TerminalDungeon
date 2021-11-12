@@ -19,8 +19,8 @@ namespace TerminalDungeon
         public static Player currentPlayer = new Player();
 
         //bools used for logic
-        public bool playerIsAlive = true;
         public bool continueToRun = true;
+        public bool playerIsAlive = true;
         public bool encounterComplete = false;
 
         //ints used for game logic
@@ -28,6 +28,7 @@ namespace TerminalDungeon
         public int playerArmor = 0;
         public int roomsCompleted = 0;
 
+        
         
         public void Run()
         {
@@ -37,15 +38,16 @@ namespace TerminalDungeon
         //Main Menu before game officially starts option to quit 
         private void RunMenu()
         {
+            
             playerIsAlive = true;
             while (continueToRun == true)
             {
                 Console.Clear();
-                Console.WriteLine(
+                _console.WriteLine(
                  "Enter the number of the option you'd like to select and press Enter: \n" +
                  "1. New Game \n" +
                  "2. Exit Game");
-                string userInput = Console.ReadLine().ToLower();
+                string userInput = _console.ReadLine().ToLower();
                 switch (userInput)
                 {
                     case "1":
@@ -58,7 +60,7 @@ namespace TerminalDungeon
                         break;
                     default:
                         Console.WriteLine("Please enter a valid number! Press any key to continue");
-                        Console.ReadKey();
+                        _console.ReadKey();
                         break;
                 }
 
@@ -98,6 +100,8 @@ namespace TerminalDungeon
         //Loads before main gameplay
         private void TitleScreen()
         {
+            continueToRun = true;
+            Console.Clear();
             Console.WriteLine(@"
  _______  _______                   _________ _        ______  
 (  ____ \(  ____ \|\     /||\     /|\__   __/( \      (  __  \ 
@@ -154,7 +158,7 @@ namespace TerminalDungeon
                 playerHasArmor = true;
             }
 
-            while (encounterComplete == false && playerIsAlive == true)
+            while (encounterComplete == false && playerIsAlive == true && continueToRun == true)
             {
                 //switch case to apply condition affects based on individual room
                 switch (currentRoom.Name)
@@ -337,7 +341,8 @@ namespace TerminalDungeon
             }
             else
             {
-                Console.WriteLine("The beast has fixated on you!!!");
+                Console.WriteLine("The beast has seen you!!!");
+                _console.ReadLine();
                 StartCombat();
             }
         }
@@ -349,7 +354,7 @@ namespace TerminalDungeon
 
             int enemyHealth = currentEnemy.Health;
 
-            Console.WriteLine("The beast sees you! Get prepared to fight a " + currentEnemy.Name + "!");
+            Console.WriteLine("The beast fixates on you! Get prepared to fight a " + currentEnemy.Name + "!");
             Console.WriteLine(" Press Enter to continue");
             /*Console.WriteLine(currentEnemy.Health);
             Console.WriteLine(currentPlayer.Damage);*/
@@ -366,66 +371,66 @@ namespace TerminalDungeon
                 {
                     enemyHealth = enemyHealth - currentPlayer.Damage;
                     Console.WriteLine("You struck the " + currentEnemy.Name + ". It has " + enemyHealth + " life left.");
-                    Console.ReadLine();
+                    _console.ReadLine();
                     if (enemyRoll > 9 && enemyHealth > 0)
                     {
                         currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
                         Console.WriteLine("The " + currentEnemy.Name + " struck you. You have " + currentPlayer.Health + " life remaining.");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                     else if (enemyRoll < 9 && enemyHealth > 0)
                     {
                         Console.WriteLine("The " + currentEnemy.Name + " missed.");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                 }
                 else if (currentPlayer.Speed >= currentEnemy.Speed && playerRoll < 6 && enemyHealth > 0 && currentPlayer.Health > 0)
                 {
                     Console.WriteLine("Your attack missed!");
-                    Console.ReadLine();
+                    _console.ReadLine();
                     if (enemyRoll > 9 && currentEnemy.Health > 0)
                     {
                         currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
                         Console.WriteLine("The " + currentEnemy.Name + " struck you. You have " + currentPlayer.Health + " life remaining.");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                     else if (enemyRoll < 9 && enemyHealth > 0)
                     {
                         Console.WriteLine("The " + currentEnemy.Name + " missed.");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                 }
                 else if (currentEnemy.Speed > currentPlayer.Speed && enemyRoll > 9 && enemyHealth > 0 && currentPlayer.Health > 0)
                 {
                     currentPlayer.Health = currentPlayer.Health - currentEnemy.Attack;
                     Console.WriteLine("The " + currentEnemy.Name + " struck you. You have " + currentPlayer.Health + " life remaining.");
-                    Console.ReadLine();
+                    _console.ReadLine();
                     if (playerRoll > 6 && currentPlayer.Health >= 1)
                     {
                         enemyHealth = enemyHealth - currentPlayer.Damage;
                         Console.WriteLine("You struck the " + currentEnemy.Name + ". It has " + enemyHealth + " life left.");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                     else if (playerRoll < 6 && currentPlayer.Health >= 1)
                     {
                         Console.WriteLine("Your attack missed!");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                 }
                 else if (currentEnemy.Speed > currentPlayer.Speed && enemyRoll < 9 && enemyHealth > 0 && currentPlayer.Health > 0)
                 {
                     Console.WriteLine("The " + currentEnemy.Name + " missed.");
-                    Console.ReadLine();
+                    _console.ReadLine();
                     if (playerRoll > 6 && currentPlayer.Health >= 1)
                     {
                         enemyHealth = enemyHealth - currentPlayer.Damage;
                         Console.WriteLine("You struck the " + currentEnemy.Name + ". It has " + enemyHealth + " life left.");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                     else if (playerRoll < 6 && currentPlayer.Health >= 1)
                     {
                         Console.WriteLine("Your attack missed!");
-                        Console.ReadLine();
+                        _console.ReadLine();
                     }
                 }
                 else if (currentPlayer.Health < 1)
@@ -433,7 +438,7 @@ namespace TerminalDungeon
                     playerIsAlive = false;
                     playerCanFight = false;
                     Console.WriteLine("the beast defeated you");
-                    Console.ReadLine();
+                    _console.ReadLine();
                     GameOver();
                 }
                 else if (enemyHealth < 1)
@@ -442,7 +447,7 @@ namespace TerminalDungeon
                     encounterComplete = true;
                     enemyCanFight = false;
                     Console.WriteLine("you beat the " + currentEnemy.Name);
-                    Console.ReadLine();
+                    _console.ReadLine();
                     RewardPlayer();
                 }
             }
@@ -514,8 +519,10 @@ namespace TerminalDungeon
         public void GameOver()
         {
             Console.WriteLine("You have died! You completed " + roomsCompleted + " rooms");
-            Console.WriteLine(" Press Enter to go back to main menu");
+            Console.WriteLine(" Press Enter to quit");
             Console.ReadLine();
+            continueToRun = false;
+            playerIsAlive = false;
             RunMenu();
         }
     }

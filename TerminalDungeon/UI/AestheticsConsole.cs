@@ -28,21 +28,20 @@ namespace TerminalDungeon.UI
         public string ReadLine()
         {
             var input = Console.ReadLine();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 25; i++)
             {
-                Console.Write(".");
-                Console.Beep(100, 20);
-                Thread.Sleep(70);
+                Console.Write("_");
+                Thread.Sleep(60);
             }
             Console.Write("\n");
             return input;
         }
 
-
         public void WriteLine(string s)
         {
             Console.WriteLine(s);
             Console.ForegroundColor = ConsoleColor.Green;
+            Thread.Sleep(10);
         }
 
         public void WriteLine(object o)
